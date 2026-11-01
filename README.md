@@ -24,14 +24,14 @@ Ovi Git convierte el historial de cualquier repositorio del espacio de trabajo e
 
 ## Operaciones Git
 
-| Elemento | Acciones disponibles |
-| --- | --- |
-| Commit | Crear rama o etiqueta, checkout separado, cherry-pick, revert, reset y copiar hash |
-| Rama local | Checkout, merge, crear rama, eliminar y copiar nombre |
-| Rama remota | Crear rama local, merge, eliminar del remoto y copiar nombre |
-| Etiqueta | Eliminar y copiar nombre |
-| Stash | Aplicar, pop, crear rama y eliminar |
-| Cambios locales | Guardar en stash o abrir Control de código fuente |
+| Elemento        | Acciones disponibles                                                               |
+| --------------- | ---------------------------------------------------------------------------------- |
+| Commit          | Crear rama o etiqueta, checkout separado, cherry-pick, revert, reset y copiar hash |
+| Rama local      | Checkout, merge, crear rama, eliminar y copiar nombre                              |
+| Rama remota     | Crear rama local, merge, eliminar del remoto y copiar nombre                       |
+| Etiqueta        | Eliminar y copiar nombre                                                           |
+| Stash           | Aplicar, pop, crear rama y eliminar                                                |
+| Cambios locales | Guardar en stash o abrir Control de código fuente                                  |
 
 Las operaciones destructivas solicitan confirmación antes de ejecutarse.
 

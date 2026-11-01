@@ -1,59 +1,59 @@
 {
-	"name": "ovi-git",
-	"displayName": "Ovi Git",
-	"description": "Visualiza el historial de Git como un gráfico y gestiona ramas, commits, etiquetas y stashes.",
-	"version": "0.1.1",
-	"publisher": "ovi-dev",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ovi-dev/ovi-git.git"
-	},
-	"homepage": "https://github.com/ovi-dev/ovi-git#readme",
-	"bugs": {
-		"url": "https://github.com/ovi-dev/ovi-git/issues"
-	},
-	"engines": {
-		"vscode": "^1.85.0"
-	},
-	"categories": [
-		"SCM Providers",
-		"Visualization"
-	],
-	"keywords": [
-		"git",
-		"graph",
-		"history",
-		"branches"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "oviGit.open",
-				"title": "Abrir gráfico",
-				"category": "Ovi Git",
-				"icon": "$(git-merge)"
-			}
-		],
-		"menus": {
-			"scm/title": [
-				{
-					"command": "oviGit.open",
-					"group": "navigation",
-					"when": "scmProvider == git"
-				}
-			]
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
-	},
-	"devDependencies": {
-		"@types/node": "^20.0.0",
-		"@types/vscode": "^1.85.0",
-		"typescript": "^5.4.0"
-	}
+  "name": "ovi-git",
+  "displayName": "Ovi Git",
+  "description": "Visualiza el historial de Git como un gráfico y gestiona ramas, commits, etiquetas y stashes.",
+  "version": "0.1.1",
+  "publisher": "ovi-dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ovi-dev/ovi-git.git"
+  },
+  "homepage": "https://github.com/ovi-dev/ovi-git#readme",
+  "bugs": {
+    "url": "https://github.com/ovi-dev/ovi-git/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Visualization"
+  ],
+  "keywords": [
+    "git",
+    "graph",
+    "history",
+    "branches"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "oviGit.open",
+        "title": "Abrir gráfico",
+        "category": "Ovi Git",
+        "icon": "$(git-merge)"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "oviGit.open",
+          "group": "navigation",
+          "when": "scmProvider == git"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
 }
