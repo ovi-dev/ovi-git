@@ -45,6 +45,7 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
     if (seq !== this.seq) return;
     if (repositories.length === 0) {
       this.git = undefined;
+      this.view.badge = undefined;
       void this.view.webview.postMessage({ type: "data", repositories: [] });
       return;
     }
@@ -56,14 +57,22 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
         : repositories[0].root;
     if (!root) return;
     this.git = new Git(root);
-    const [head, refs, changes] = await Promise.all([
+    const [head, refs, changes, sync, remotes] = await Promise.all([
       this.git.head(),
       this.git.refs(),
       this.git.workingChanges(),
+      this.git.syncStatus(),
+      this.git.remotes(),
     ]);
     if (seq !== this.seq) return;
     this.refs = refs;
     this.changes = changes;
+    this.view.badge = changes.length
+      ? {
+          value: changes.length,
+          tooltip: `${changes.length} ${changes.length === 1 ? "cambio pendiente" : "cambios pendientes"} de commit`,
+        }
+      : undefined;
     this.comparison = undefined;
     this.selectedRef = undefined;
     void this.view.webview.postMessage({
@@ -72,6 +81,8 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
       root,
       head,
       changes,
+      sync,
+      hasRemote: remotes.length > 0,
       branches: refs
         .filter((ref) => ref.type === "head" || ref.type === "remote")
         .sort(
@@ -111,7 +122,17 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
         case "createBranch":
           return await this.createBranch(message.name);
         case "commit":
-          return await this.commit(message.message);
+          return await this.commit(message.message, message.push === true);
+        case "push":
+          return await this.push();
+        case "pull":
+          return await this.remoteOperation("Pull", ["pull"]);
+        case "fetch":
+          return await this.remoteOperation("Fetch", [
+            "fetch",
+            "--all",
+            "--prune",
+          ]);
         case "openWorkingFile":
           return await this.openWorkingFile(message.index);
         case "openBranchFile":
@@ -163,11 +184,60 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
     await this.afterMutation("createBranch");
   }
 
-  private async commit(message: unknown): Promise<void> {
+  private async commit(message: unknown, push: boolean): Promise<void> {
     if (!this.git || this.changes.length === 0)
       throw new Error("No hay cambios para confirmar.");
     await this.git.commitAll(typeof message === "string" ? message : "");
-    await this.afterMutation("commit");
+    void this.view?.webview.postMessage({
+      type: "mutationDone",
+      operation: "commit",
+    });
+    if (push) return await this.push();
+    await this.afterMutation();
+  }
+
+  private async push(): Promise<void> {
+    if (!this.git) return;
+    const [head, sync, remotes] = await Promise.all([
+      this.git.head(),
+      this.git.syncStatus(),
+      this.git.remotes(),
+    ]);
+    if (!head.branch)
+      throw new Error("No puedes hacer push con HEAD separado.");
+    if (sync.upstream) return await this.remoteOperation("Push", ["push"]);
+    if (remotes.length === 0)
+      throw new Error("El repositorio no tiene ningún remoto configurado.");
+    const remote = remotes.includes("origin")
+      ? "origin"
+      : remotes.length === 1
+        ? remotes[0]
+        : await vscode.window.showQuickPick(remotes, {
+            placeHolder: `Remoto donde publicar ${head.branch}`,
+          });
+    if (!remote) return await this.afterMutation();
+    await this.remoteOperation("Publicar rama", [
+      "push",
+      "-u",
+      remote,
+      head.branch,
+    ]);
+  }
+
+  private async remoteOperation(title: string, args: string[]): Promise<void> {
+    const git = this.git;
+    if (!git) return;
+    try {
+      await vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: `Ovi Git: ${title}...`,
+        },
+        () => git.run(args),
+      );
+    } finally {
+      await this.afterMutation();
+    }
   }
 
   private async afterMutation(
@@ -263,6 +333,12 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
 		<section class="head">
 			<div class="eyebrow">Rama actual</div>
 			<div class="head-row"><strong id="currentBranch"></strong><button id="toggleCreate">Nueva rama</button></div>
+			<div id="syncInfo" class="sync-info"></div>
+			<div id="syncActions" class="sync-actions">
+				<button id="fetch" title="Descargar referencias de todos los remotos">Fetch</button>
+				<button id="pull" title="Traer e integrar cambios del remoto">Pull</button>
+				<button id="push" title="Enviar commits al remoto">Push</button>
+			</div>
 			<form id="createForm" hidden><input id="branchName" autocomplete="off" placeholder="feature/nombre"><button>Crear y cambiar</button></form>
 		</section>
 		<section>
@@ -271,7 +347,10 @@ export class WorkspaceViewProvider implements vscode.WebviewViewProvider {
 			<div id="clean" class="muted">El directorio de trabajo está limpio.</div>
 			<form id="commitForm">
 				<textarea id="commitMessage" rows="2" placeholder="Mensaje del commit" aria-label="Mensaje del commit"></textarea>
-				<button id="commitButton" class="primary">Confirmar todos los cambios</button>
+				<div class="commit-actions">
+					<button id="commitButton" class="primary">Confirmar todos los cambios</button>
+					<button id="commitPushButton" type="button" title="Confirmar todos los cambios y hacer push">Confirmar y push</button>
+				</div>
 			</form>
 		</section>
 		<section>

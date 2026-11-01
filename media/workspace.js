@@ -49,6 +49,7 @@
     $("currentBranch").textContent =
       data.head.branch ??
       `HEAD separado · ${(data.head.hash ?? "").slice(0, 7)}`;
+    renderSync(data);
     renderFiles("changes", data.changes, "openWorkingFile");
     $("changeCount").textContent = String(data.changes.length);
     $("clean").hidden = data.changes.length > 0;
@@ -86,6 +87,32 @@
       branches.appendChild(row);
     }
     $("branchDetail").hidden = true;
+  }
+
+  function renderSync(data) {
+    const { upstream, ahead, behind } = data.sync;
+    const canPush = data.hasRemote && !!data.head.branch;
+    $("syncActions").hidden = !data.hasRemote;
+    $("syncInfo").textContent = !data.hasRemote
+      ? "Sin remoto configurado"
+      : !data.head.branch
+        ? ""
+        : upstream
+          ? ahead || behind
+            ? `${upstream} · ↑${ahead} ↓${behind}`
+            : `${upstream} · al día`
+          : "Rama sin publicar";
+    $("pull").textContent = behind ? `Pull ↓${behind}` : "Pull";
+    $("push").textContent = upstream
+      ? ahead
+        ? `Push ↑${ahead}`
+        : "Push"
+      : "Publicar";
+    $("push").classList.toggle("primary", ahead > 0 || (canPush && !upstream));
+    /** @type {HTMLButtonElement} */ ($("pull")).disabled = !upstream;
+    /** @type {HTMLButtonElement} */ ($("push")).disabled = !canPush;
+    /** @type {HTMLButtonElement} */ ($("commitPushButton")).disabled =
+      !canPush;
   }
 
   function renderFiles(containerId, files, messageType) {
@@ -141,11 +168,28 @@
   });
   $("commitForm").addEventListener("submit", (event) => {
     event.preventDefault();
+    submitCommit(false);
+  });
+  $("commitPushButton").addEventListener("click", () => submitCommit(true));
+  $("commitMessage").addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      submitCommit(false);
+    }
+  });
+  for (const type of ["fetch", "pull", "push"]) {
+    $(type).addEventListener("click", () => {
+      setBusy(true);
+      vscode.postMessage({ type });
+    });
+  }
+
+  function submitCommit(push) {
     const input = /** @type {HTMLTextAreaElement} */ ($("commitMessage"));
     if (!input.value.trim()) return;
     setBusy(true);
-    vscode.postMessage({ type: "commit", message: input.value });
-  });
+    vscode.postMessage({ type: "commit", message: input.value, push });
+  }
 
   window.addEventListener("message", (event) => {
     const message = event.data;

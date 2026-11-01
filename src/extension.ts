@@ -24,6 +24,9 @@ export function activate(context: vscode.ExtensionContext): void {
       if (root) GraphPanel.show(context.extensionUri, new Git(root));
     }),
     vscode.workspace.onDidSaveTextDocument(() => void workspaceView.refresh()),
+    vscode.workspace.onDidCreateFiles(() => void workspaceView.refresh()),
+    vscode.workspace.onDidDeleteFiles(() => void workspaceView.refresh()),
+    vscode.workspace.onDidRenameFiles(() => void workspaceView.refresh()),
     vscode.window.onDidChangeWindowState((state) => {
       if (state.focused) void workspaceView.refresh();
     }),

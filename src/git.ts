@@ -223,6 +223,34 @@ export class Git {
     return { base, target, files: await this.changes(base, target) };
   }
 
+  async syncStatus(): Promise<{
+    upstream: string | null;
+    ahead: number;
+    behind: number;
+  }> {
+    const upstream = await this.run([
+      "rev-parse",
+      "--abbrev-ref",
+      "--symbolic-full-name",
+      "@{u}",
+    ]).then(
+      (s) => s.trim(),
+      () => null,
+    );
+    if (!upstream) return { upstream: null, ahead: 0, behind: 0 };
+    const [behind, ahead] = (
+      await this.run(["rev-list", "--left-right", "--count", "@{u}...HEAD"])
+    )
+      .trim()
+      .split(/\s+/)
+      .map(Number);
+    return { upstream, ahead: ahead || 0, behind: behind || 0 };
+  }
+
+  async remotes(): Promise<string[]> {
+    return (await this.run(["remote"])).split("\n").filter(Boolean);
+  }
+
   async commitAll(message: string): Promise<void> {
     const subject = message.trim();
     if (!subject) throw new Error("Escribe un mensaje para el commit.");

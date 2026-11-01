@@ -142,6 +142,7 @@ form {
 }
 
 form[hidden],
+.sync-actions[hidden],
 #workspace[hidden],
 #empty[hidden],
 #branchDetail[hidden],
@@ -152,6 +153,27 @@ form[hidden],
 .primary {
   color: var(--vscode-button-foreground);
   background: var(--vscode-button-background);
+}
+
+.sync-info {
+  margin-top: 4px;
+  font-size: 0.9em;
+  color: var(--vscode-descriptionForeground);
+}
+
+.sync-actions,
+.commit-actions {
+  display: grid;
+  gap: 5px;
+}
+
+.sync-actions {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 8px;
+}
+
+.commit-actions {
+  grid-template-columns: 1fr auto;
 }
 
 .primary:hover {
