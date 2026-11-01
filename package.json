@@ -2,7 +2,7 @@
   "name": "ovi-git",
   "displayName": "Ovi Git",
   "description": "Visualiza el historial de Git como un gráfico y gestiona ramas, commits, etiquetas y stashes.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "ovi-dev",
   "license": "MIT",
   "repository": {
@@ -36,12 +36,38 @@
         "icon": "$(git-merge)"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "oviGit",
+          "title": "Ovi Git",
+          "icon": "media/ovi-git.svg"
+        }
+      ]
+    },
+    "views": {
+      "oviGit": [
+        {
+          "type": "webview",
+          "id": "oviGit.workspace",
+          "name": "Workspace",
+          "contextualTitle": "Ovi Git"
+        }
+      ]
+    },
     "menus": {
       "scm/title": [
         {
           "command": "oviGit.open",
           "group": "navigation",
           "when": "scmProvider == git"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "oviGit.open",
+          "group": "navigation",
+          "when": "view == oviGit.workspace"
         }
       ]
     }

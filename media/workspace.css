@@ -1,0 +1,257 @@
+:root {
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--vscode-foreground);
+  background: var(--vscode-sideBar-background);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 3px;
+  padding: 5px 9px;
+  color: var(--vscode-button-secondaryForeground);
+  background: var(--vscode-button-secondaryBackground);
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--vscode-input-border, transparent);
+  border-radius: 2px;
+  padding: 6px 7px;
+  outline: none;
+  color: var(--vscode-input-foreground);
+  background: var(--vscode-input-background);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 52px;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px 28px;
+  gap: 5px;
+  padding: 8px;
+  border-bottom: 1px solid
+    var(--vscode-sideBar-border, var(--vscode-panel-border));
+  background: var(--vscode-sideBar-background);
+}
+
+header select {
+  height: 28px;
+  padding: 2px 6px;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 17px;
+  line-height: 28px;
+}
+
+section {
+  padding: 11px 9px;
+  border-bottom: 1px solid
+    var(--vscode-sideBar-border, var(--vscode-panel-border));
+}
+
+.eyebrow,
+.muted {
+  color: var(--vscode-descriptionForeground);
+}
+
+.eyebrow {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+}
+
+.head-row,
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.head-row strong,
+.section-title strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-title {
+  margin-bottom: 7px;
+}
+
+.section-title span {
+  min-width: 21px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-align: center;
+  color: var(--vscode-badge-foreground);
+  background: var(--vscode-badge-background);
+}
+
+form {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+form[hidden],
+#workspace[hidden],
+#empty[hidden],
+#branchDetail[hidden],
+.muted[hidden] {
+  display: none;
+}
+
+.primary {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+}
+
+.primary:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.file-list,
+.branch-list {
+  display: grid;
+  gap: 1px;
+}
+
+.file,
+.branch {
+  min-width: 0;
+  height: 28px;
+}
+
+.file {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  width: 100%;
+  padding: 3px 5px;
+  text-align: left;
+  color: var(--vscode-foreground);
+  background: transparent;
+}
+
+.file:hover,
+.branch:hover,
+.branch.selected {
+  background: var(--vscode-list-hoverBackground);
+}
+
+.file-path,
+.branch-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status {
+  font-weight: 700;
+}
+
+.status-M {
+  color: var(--vscode-gitDecoration-modifiedResourceForeground);
+}
+.status-A,
+.status-\? {
+  color: var(--vscode-gitDecoration-addedResourceForeground);
+}
+.status-D {
+  color: var(--vscode-gitDecoration-deletedResourceForeground);
+}
+.status-R,
+.status-C {
+  color: var(--vscode-gitDecoration-renamedResourceForeground);
+}
+
+.staged {
+  font-size: 0.8em;
+  color: var(--vscode-testing-iconPassed);
+}
+
+.branch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  border-left: 2px solid transparent;
+}
+
+.branch.current {
+  border-left-color: var(--vscode-gitDecoration-addedResourceForeground);
+}
+
+.branch-name {
+  height: 28px;
+  padding: 4px 6px;
+  text-align: left;
+  color: var(--vscode-foreground);
+  background: transparent;
+}
+
+.checkout {
+  margin-right: 3px;
+  padding: 3px 7px;
+  font-size: 0.9em;
+}
+
+.muted {
+  padding: 5px 2px;
+  line-height: 1.45;
+}
+
+#empty {
+  display: grid;
+  gap: 10px;
+  padding: 18px 12px;
+  text-align: center;
+}

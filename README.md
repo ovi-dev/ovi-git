@@ -14,6 +14,11 @@ Ovi Git convierte el historial de cualquier repositorio del espacio de trabajo e
 
 ## Características
 
+- Vista propia en la barra de actividad para trabajar sin abandonar el editor.
+- Selector de repositorio, rama actual y cambios locales en un único panel.
+- Creación y cambio de ramas con controles directos.
+- Comparación de ramas con la lista de archivos modificados y acceso al diff.
+- Creación de commits con todos los cambios desde el panel lateral.
 - Historial gráfico con ramas, merges y posición actual de `HEAD`.
 - Referencias locales, remotas y etiquetas junto a cada commit.
 - Búsqueda por mensaje, autor, correo, hash o nombre de rama.
@@ -38,12 +43,12 @@ Las operaciones destructivas solicitan confirmación antes de ejecutarse.
 ## Uso
 
 1. Abre en VS Code una carpeta que pertenezca a un repositorio Git.
-2. Abre la paleta de comandos con `Cmd+Shift+P` en macOS o `Ctrl+Shift+P` en Windows y Linux.
-3. Ejecuta **Ovi Git: Abrir gráfico**.
-4. Selecciona un commit para consultar sus detalles.
-5. Haz clic sobre una rama o etiqueta para ver sus acciones, o abre el menú contextual de un commit.
+2. Selecciona el icono de Ovi Git en la barra de actividad.
+3. Consulta los cambios locales, crea una rama o escribe el mensaje para confirmar todos los cambios.
+4. Selecciona una rama para comparar sus archivos con la rama actual.
+5. Pulsa **Abrir gráfico** para explorar el historial completo y consultar los detalles de cada commit.
 
-También puedes abrir Ovi Git desde el botón de gráfico situado en el encabezado de Control de código fuente.
+También puedes ejecutar **Ovi Git: Abrir gráfico** desde la paleta de comandos o usar el botón situado en el encabezado de Control de código fuente.
 
 ## Instalación desde un VSIX
 
