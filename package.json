@@ -4,6 +4,7 @@
   "description": "Visualiza el historial de Git como un gráfico y gestiona ramas, commits, etiquetas y stashes.",
   "version": "0.2.1",
   "publisher": "ovi-dev",
+  "icon": "images/icon.png",
   "license": "MIT",
   "repository": {
     "type": "git",

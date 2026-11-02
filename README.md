@@ -80,6 +80,26 @@ Pulsa `F5` y selecciona **Ejecutar extensión** para abrir una ventana de Extens
 npm run watch
 ```
 
+## Publicación
+
+Inicia sesión con el publisher (solo la primera vez; pide un token de Azure DevOps con permiso **Marketplace → Manage**):
+
+```bash
+npx @vscode/vsce login ovi-dev
+```
+
+Publica una nueva versión (usa `minor` o `major` según el tipo de cambio):
+
+```bash
+npx @vscode/vsce publish patch
+```
+
+Sube el commit y la etiqueta de versión que crea `vsce`:
+
+```bash
+git push origin main --follow-tags
+```
+
 ## Privacidad
 
 Ovi Git ejecuta el binario local de Git con las credenciales y la configuración de tu equipo. La extensión no incluye telemetría y no transmite el historial ni los archivos del repositorio.
