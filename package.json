@@ -2,7 +2,7 @@
   "name": "ovi-git",
   "displayName": "Ovi Git",
   "description": "Visualiza el historial de Git como un gráfico y gestiona ramas, commits, etiquetas y stashes.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publisher": "ovi-dev",
   "icon": "images/icon.png",
   "license": "MIT",
