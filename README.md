@@ -82,23 +82,46 @@ npm run watch
 
 ## Publicación
 
-Inicia sesión con el publisher (solo la primera vez; pide un token de Azure DevOps con permiso **Marketplace → Manage**):
+El Marketplace no permite publicar dos veces la misma versión: **cada publicación necesita una versión nueva** en `package.json`.
+
+### ¿Qué versión subir?
+
+La versión sigue el formato `MAYOR.MENOR.PARCHE` (por ejemplo, `0.2.2`).
+
+| Tipo de cambio                                        | Comando                          | Ejemplo       |
+| ----------------------------------------------------- | -------------------------------- | ------------- |
+| Corrección de errores, textos, iconos o documentación | `npx @vscode/vsce publish patch` | 0.2.2 → 0.2.3 |
+| Nueva funcionalidad compatible con lo anterior        | `npx @vscode/vsce publish minor` | 0.2.2 → 0.3.0 |
+| Cambio incompatible o rediseño importante             | `npx @vscode/vsce publish major` | 0.2.2 → 1.0.0 |
+| La versión ya se subió pero la publicación falló      | `npx @vscode/vsce publish`       | 0.2.2 → 0.2.2 |
+
+`publish patch|minor|major` actualiza `package.json`, crea un commit y una etiqueta (`v0.2.3`) y publica. Requiere que no haya cambios sin confirmar.
+
+### Flujo habitual
 
 ```bash
-npx @vscode/vsce login ovi-dev
-```
-
-Publica una nueva versión (usa `minor` o `major` según el tipo de cambio):
-
-```bash
+git add -A
+git commit -m "Descripción del cambio"
 npx @vscode/vsce publish patch
-```
-
-Sube el commit y la etiqueta de versión que crea `vsce`:
-
-```bash
 git push origin main --follow-tags
 ```
+
+### Referencia rápida
+
+| Tarea                                        | Comando                              |
+| -------------------------------------------- | ------------------------------------ |
+| Instalar dependencias                        | `npm install`                        |
+| Compilar                                     | `npm run compile`                    |
+| Compilar en modo observación                 | `npm run watch`                      |
+| Generar el `.vsix` para probar localmente    | `npx @vscode/vsce package`           |
+| Iniciar sesión en el Marketplace (una vez)   | `npx @vscode/vsce login ovi-dev`     |
+| Publicar subiendo versión                    | `npx @vscode/vsce publish patch`     |
+| Publicar sin subir versión                   | `npx @vscode/vsce publish`           |
+| Subir commits y etiquetas a GitHub           | `git push origin main --follow-tags` |
+| Ver cambios pendientes                       | `git status`                         |
+| Ver últimas versiones publicadas (etiquetas) | `git tag --sort=-v:refname`          |
+
+> El login pide un token de Azure DevOps con el permiso **Marketplace → Manage**. Si caduca, vuelve a ejecutar `npx @vscode/vsce login ovi-dev`.
 
 ## Privacidad
 
